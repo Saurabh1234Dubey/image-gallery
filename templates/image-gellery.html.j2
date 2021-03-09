@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+/* Font */
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
+
+/* Design */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+    width:100%;
+  height:100%;
+}
+
+body {
+  font-family: 'Quicksand', serif;
+  font-style: normal;
+  font-weight: 400;
+  width:100%;
+  height:100%;
+  background-color: blue;
+  margin-top:20px;
+}
+
+#body {
+  background: #555;
+  position:fixed;
+  margin: 0 auto; 
+  text-align: center;
+}
+
+#overlay {
+     position: fixed;
+}
+.content {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  padding: 10px;
+  margin-top:15%;
+  text-align: center;
+}
+
+.main{
+  max-width: 1200px;
+  margin: 0 auto;
+  
+
+
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.btn {
+  color: #ffffff;
+  padding: 0.8rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  font-weight: 400;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+}
+
+.btn:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cards_item {
+  display: flex;
+  padding: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .cards_item {
+    width: 50%;
+  }
+}
+
+@media (min-width: 56rem) {
+  .cards_item {
+    width: 33.3333%;
+    height:20%;
+  }
+}
+
+.card {
+  background-color: grey;
+  border-radius: 0.25rem;
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height:500px;
+  width:500px;
+  
+}
+
+.card_content {
+  padding: 1rem;
+  background: linear-gradient(to bottom left, #EF8D9C 40%, #FFC39E 100%);
+}
+
+.card_title {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  margin: 0px;
+}
+
+.card_text {
+  color: #ffffff;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;    
+  font-weight: 400;
+  
+}
+.made_by{
+  font-weight: 400;
+  font-size: 13px;
+  margin-top: 35px;
+  text-align: center;
+}
+
+.body
+{
+    width: 100%;
+    height: 100%;
+    background-attachment: fixed;
+    background: rgb(238,238,238);
+}
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="{{static('js/validations.js')}}"></script>
+
+</head>
+{% block content %}
+    <body class="body">
+    {% include 'headers.html.j2' %}
+
+    <body>
+        <div class="container">
+          <div class="row">
+            <ul class="cards" id="image-card-id">
+                {%for m in media%}
+                  <li class="cards_item">
+                    <div class="card">
+                      <div class="card_image image-fluid"><img src="{{m.image.url}}"></div>
+                      <div class="card_content">
+                        <button type="button" class="btn card_btn">{{m.title|title}}</button>
+                      </div>
+                    </div>
+                  </li>
+                  {%endfor%}
+            </ul>
+      </div>
+      </div>
+  {%endblock%}
+
+
+</body>
+</html>
+
+<script>
+function filter(e){
+    var csrf_token = $(e).data("csrf-token");
+    var arr = Array()
+    $('input:checkbox.checkbox').each(function () {
+       var val = (this.checked ? $(this).val() : "");
+       if (val){
+        arr.push(val);
+       }
+    
+  });
+  console.log(arr);
+
+      $.ajax({
+        type:'POST',
+        url: "{{url('filter_image')}}",
+        data : {'cat':arr},
+        success: function (resp) {
+            console.log(resp)
+            $("#image-card-id").html('');
+            if (resp.length>0){
+                for (var i=0; i<resp.length; i++){
+                  console.log(resp['image'])
+                  innerHTML = `<li class="cards_item">
+                                <div class="card">
+                                  <div class="card_image image-fluid"><img src="${resp[i]['image']}"></div>
+                                  <div class="card_content">
+                                    <button type="button" class="btn card_btn">${resp[i]['title']}</button>
+                                  </div>
+                                </div>
+                              </li>`
+                   $("#image-card-id").append(innerHTML);
+                }
+              }else{
+                innerHTML = `No Image Found, Please upload it !`
+                 $("#image-card-id").append(innerHTML);
+              }
+             
+            
+        },
+        error: function(err) {
+        }
+      });
+}
+</script>

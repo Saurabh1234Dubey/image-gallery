@@ -1,0 +1,45 @@
+{% extends "image-gellery.html.j2" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+</style>
+</head>
+
+<body id="body">
+{% include 'headers.html.j2'%}
+
+
+<div class="content">
+
+  <form method="post" id="add_category_id" enctype="multipart/form-data">{{csrf_input}}
+    <h2>Add Category</h2>
+    <div class="row">
+      
+      <!--  col-md-6   -->
+
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="last">Category Name:</label>
+          <input type="text" class="form-control fvalidation custom-validaion" placeholder="" name="name" id="last">
+          <span class="text-danger error-msg"></span>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="form-group">
+          <button type="button" onclick="submit_form('add_category_id','btn-submit', 'Added category successfully!')" id="btn-submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+      <!--  col-md-6   -->
+    </div>
+  </form>
+</div>
+</div>
+
+</body>
+</html>
+{%endblock%}

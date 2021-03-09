@@ -1,0 +1,78 @@
+{% extends "image-gellery.html.j2" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+</style>
+</head>
+
+<body id="body">
+{% include 'headers.html.j2'%}
+
+
+<div class="content">
+
+  <form method="post" id="image_upload_id" enctype="multipart/form-data">{{csrf_input}}
+    <h2>Image Upload</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="cars">Select Image Category* :</label>
+
+            <select class="form-control fvalidation custom-validaion" name="category" id="id">
+                <option selected value="">Select Image Category</option>
+                {% for cat in category%}
+                    <option value="{{cat.id}}">{{cat}}</option>
+                {% endfor %}
+
+            </select>
+            <span class="text-danger error-msg"></span>
+        </div>
+        
+      </div>
+      
+      <!--  col-md-6   -->
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="last">Image Title* :</label>
+          <input type="text" class="form-control fvalidation custom-validaion" name="title" placeholder="" id="last">
+          <span class="text-danger error-msg"></span>
+
+        </div>
+      </div>
+      
+
+       <div class="col-md-12">
+        <div class="form-group">
+          <label for="last">Select Image* :</label>
+          <input type="file" class="form-control fvalidation custom-validaion" name="image" placeholder="" id="last">
+          <span class="text-danger error-msg"></span>
+
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+            <a href="{{url('add_category')}}" class="btn btn-primary">+ Add Category</a>
+
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <button type="button" onclick="submit_form('image_upload_id','btn-submit', 'Added image successfully!')" id="btn-submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+      <!--  col-md-6   -->
+    </div>
+  </form>
+</div>
+</div>
+
+</body>
+</html>
+{%endblock%}
