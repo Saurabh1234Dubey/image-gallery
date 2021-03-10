@@ -17,6 +17,10 @@ class Category(Base):
     
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
 
 class Media(Base):
     """
@@ -28,3 +32,7 @@ class Media(Base):
 
     def __str__(self):
         return self.category.name
+
+    class Meta:
+        verbose_name = 'Media'
+        verbose_name_plural = 'Media'
