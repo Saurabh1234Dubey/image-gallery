@@ -3,6 +3,9 @@ from .models import Media
 from .utils import GetDict
 
 def GetImage(request):
+    '''
+    To get filtered images
+    '''
     data = request.POST.getlist('cat[]')
     if data:
         data_list = [int(i) for i in data] 
